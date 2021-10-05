@@ -6,21 +6,72 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <title>MINE SWEEPER</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@700&display=swap" rel="stylesheet">
+    <title>Mine Sweeper - Adam Bercovich</title>
 </head>
 
 <body onload="initGame()">
     <h1>MINE SWEEPER</h1>
     <div class="header">
         <table>
-            <tr class="header">
+            <tr>
                 <td class="mines"></td>
-                <td class="smiley" onclick="initGame()">😊</td>
+                <td class="smiley" onclick="initGame()" title="Click ME to restart">😊</td>
                 <td class="timer">Timer</td>
             </tr>
         </table>
     </div>
-    <div class="board-container"></div>
+    <div class="hearts">
+        <table>
+            <tr>
+                <td class="heart1">💖</td>
+                <td class="heart2">💖</td>
+                <td class="heart3">💖</td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <div class="hints test">
+            <table>
+                <tr>
+                    <td class="hint1" onclick="hintMode(this)" title="Click for HINT">💡</td>
+                </tr>
+                <tr>
+                    <td class="hint2" onclick="hintMode(this)" title="Click for HINT">💡</td>
+                </tr>
+                <tr>
+                    <td class="hint3" onclick="hintMode(this)" title="Click for HINT">💡</td>
+                </tr>
+                <tr>
+                    <td class="space"></td>
+                </tr>
+                <tr>
+                    <tdclass="space">
+                        </td>
+                </tr>
+                <tr class="safe-click-container">
+                    <td class="safe-click" colspan="3" onclick="safeClick()">Safe Click x 3</td>
+                </tr>
+            </table>
+        </div>
+        <div class="board-container"></div>
+    </div>
+    <h2>How good are you?</h2>
+    </div>
+    <div class="level">
+        <table>
+            <tr>
+                <td onclick="changeLvl(this)">Beginner</td>
+                <td onclick="changeLvl(this)">Medium</td>
+                <td onclick="changeLvl(this)">Expert</td>
+            </tr>
+        </table>
+    </div>
+    <footer>Made By Adam Bercovich</footer>
     <script src="js/utils.js"></script>
     <script src="js/main.js"></script>
 </body>
