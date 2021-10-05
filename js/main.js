@@ -1,45 +1,10 @@
 'use strict'
 
-/*   To DO:
-
-~initGame()~
-This is called when page loads
-
-~buildBoard()~ DONE
-Builds the board
-Set mines at random locations
-Call setMinesNegsCount()
-Return the created board
-
-~setMinesNegsCount(board)~ DONE
-Count mines around each cell and set the cell's minesAroundCount.
-
-~renderBoard(board)~ DONE
-Render the board as a <table> to the page
-
-~cellClicked(elCell, i, j)~ DONE
-Called when a cell (td) is clicked
-
-~cellMarked(elCell)~  DONE
-Called on right click to mark a cell (suspected to be a mine)
-Search the web (and implement) how to hide the context menu on right click
-
-~checkGameOver()~ DONE
-Game ends when all mines are marked, && and all the other cells are shown
-
-~expandShown(board, elCell,i, j)~ HAlF DONE
-When user clicks a cell with no mines around, we need to open not only that cell, but also its neighbors.
-NOTE: start with a basic implementation that only opens the non-mine 1st degree neighbors
-BONUS: if you have the time later, try to work more like the real algorithm (see description at the Bonuses section below)
-
- */
-
 const MINE = '💣'
 const FLAG = '🚩'
 const EMPTY = ''
 const HEART = '💖'
 const HINT = '💡'
-
 
 var gElHeart1 = (document.querySelector('.heart1'))
 var gElHeart2 = (document.querySelector('.heart2'))
@@ -60,7 +25,7 @@ var gBoard
 
 var gLevel = {
     SIZE: 8,
-    MINES: 2
+    MINES: 12
 }
 
 var gFirstMove = true
@@ -77,8 +42,6 @@ var gInterval
 
 var gSafeClick = 3
 var gElSafeClick = document.querySelector('.safe-click')
-
-
 
 function initGame() {
     clearInterval(gInterval)
@@ -249,41 +212,33 @@ function cellMarked(elCell, i, j) {
         if (gBoard[i][j].isMine) gGame.markedCount--
     }
 }
+
 // open all negs of 0 negs cell
 function expandShown(board, elCell, i, j) {
-    // debugger
-
-    // var countShown = 0
-    elCell.style.backgroundColor = "#ffd3d3"
+    elCell.style.backgroundColor = "#C56824"
     var cellI = i
     var cellJ = j
     for (var i = cellI - 1; i <= cellI + 1; i++) {
         if (i < 0 || i >= board.length) continue;
         for (var j = cellJ - 1; j <= cellJ + 1; j++) {
-
             if (j < 0 || j >= board[i].length) continue;
             if (gBoard[i][j].isMarked || gBoard[i][j].isMine) continue
-            var currElCell = document.querySelector(`.cell${i}-${j}`)
-
             if (i === cellI && j === cellJ) continue;
+            var currElCell = document.querySelector(`.cell${i}-${j}`)
             if (!gBoard[i][j].isShown) gGame.shownCount++
             gBoard[i][j].isShown = true
-            // countShown++
-            // if (countShown === 0) return
             currElCell.style.backgroundColor = "#C56824"
             currElCell.innerText = (gBoard[i][j].minesAroundCount === 0) ? EMPTY : gBoard[i][j].minesAroundCount
-            // if (countShown === 0) return
-            // expandShown(gBoard, currElCell, cellI - 1, cellJ - 1)
-            // if (gBoard[i][j].minesAroundCount > 0) return
-            // countShown = 0
         }
     }
+    // expandShown(board, elCell, cellI - 1, cellJ - 1)
 }
+
 
 function decreasedLife(elCell) {
 
     if (gElHeart1.innerText === HEART) {
-        gElHeart1.innerText = EMPTY
+        gElHeart1.innerText = '💀'
         gH1.innerHTML = 'Life Lost!!'
         setTimeout(() => {
             elCell.innerText = EMPTY
@@ -295,7 +250,7 @@ function decreasedLife(elCell) {
     }
 
     if (gElHeart2.innerText === HEART) {
-        gElHeart2.innerText = EMPTY
+        gElHeart2.innerText = '💀'
         gH1.innerHTML = 'One more Down!'
         setTimeout(() => {
             elCell.innerText = EMPTY
@@ -307,7 +262,7 @@ function decreasedLife(elCell) {
     }
 
     if (gElHeart3.innerText === HEART) {
-        gElHeart3.innerText = EMPTY
+        gElHeart3.innerText = '💀'
         gH1.innerHTML = 'Last One!!'
         setTimeout(() => {
             elCell.innerText = EMPTY
@@ -331,7 +286,7 @@ function checkGameOver() {
 function resetGame(isWon) {
     gFirstMove = true
 
-    gH1.innerText = (isWon) ? 'WINNER!!' : 'LOSER!!'
+    gH1.innerText = (isWon) ? 'WINNER!!' : 'You Lost - Try again'
     gSmiley.innerText = (isWon) ? '😎' : '🤯'
     if (!isWon) {
         for (var i = 0; i < gBoard.length; i++) {

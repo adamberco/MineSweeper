@@ -17,23 +17,22 @@ h1{
     margin-bottom: 20px;
     background-color: #9a875d;
     /* color: #CFB784; */
-    font-size: 60px;
-    width: 600px;
+    font-size: 35px;
+    width: 500px;
     border: 1px solid white;
     border-radius: 15px;
 }
 h2{
   margin: auto;
-  margin-top: 15px;
+  margin-top: 5px;
   width: 250px;
   border-radius: 10px;
-
   background-color: #9a875d;;
 }
 
 .header{
   margin: auto;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   /* width: 330px; */
   display: inline-block;
   border: 3px solid white;
@@ -43,10 +42,10 @@ h2{
 }
 
 .header td{
-  width: 110px;
-  height: 60px;
+  width: 70px;
+  height: 30px;
   border-radius: 15px;
-  font-size: 40px;
+  font-size:25px;
   }
 
   .hearts{
@@ -64,17 +63,29 @@ h2{
     font-size: 30px;
     }
 
+    .test{
+      height: 350px;
+      position: relative;
+    }
     .hints{
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+
+      display: inline-block;
       margin: auto;
-      margin-right: 40px;
-      padding: auto;
-      /* width: 240px; */
+      padding: absolute;
       border: 3px solid white;
       border-radius: 15px;
       background-color: #9a875d;
+      left: 50px;
+      vertical-align: middle;
+      height: 250px;
 
     }
     .hints td{
+      
       width: 60px;
       height: 20px;
       border-radius: 15px;
@@ -86,55 +97,54 @@ h2{
         margin-top: 20px;
         background-color: lightseagreen;
         color: white;
-        border: 3px solid white;
+        border: 1px solid white;
 
       }
 .board-container{
   display: inline-block;
-  margin: auto;
 
 }
-.test{
-  display: inline-block;
-  margin: auto;
 
-
-}
 .board{
-    margin: auto;
-    margin-left: 30px;
-    border: 5px solid white;
-    border-radius: 15px;
-    background-color: #9a875d;
-    color: #620f0f;
-    font-weight: bold;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+    /* margin-left: 30px; */
+  border: 3px solid white;
+  border-radius: 15px;
+  background-color: #9a875d;
+  color: #620f0f;
+  font-weight: bold;
+    
   }
   
 .cell {
-  width: 35px;
-  height: 35px;
+  width: 20px;
+  height: 20px;
   text-align: center;
-  font-size: 1.5em;
+  font-size: 15px;
   border: 2px solid white ;
   background-color: #FFF8E5;
-  border-radius: 20px;
   cursor: pointer;
-  border-radius: 15px;
+  border-radius: 7px;
 }
 
 .level{
       margin: auto;
       margin-top: 20px;
-      width: 540px;
+      width: 270px;
       border: 3px solid white;
       border-radius: 15px;
       background-color: #9a875d;
   }
   .level td{
-    width: 180px;
-    height: 45px;
+    width: 90px;
+    height: 35px;
     border-radius: 15px;
-    font-size: 30px;
+    font-size: 20px;
     cursor: pointer;
 
     }
@@ -148,7 +158,5 @@ footer{
   font-size: 1.5em;
   width: 350px;
   margin: auto;
-  margin-top: 50px;
-
-
+  margin-top: 10px;
 }
