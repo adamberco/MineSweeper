@@ -38,7 +38,7 @@ var gBoard
 
 var gLevel = {
     SIZE: 8,
-    MINES: 4
+    MINES: 12
 }
 
 var gFirstMove = true
@@ -59,11 +59,6 @@ var gElSafeClick = document.querySelector('.safe-click')
 var elbScore = document.querySelector('.b-score')
 var elmScore = document.querySelector('.m-score')
 var eleScore = document.querySelector('.e-score')
-
-// localStorage.bScore = parseInt((document.querySelector('.beginner-score').innerText).replace(':', ''))
-// localStorage.mScore = parseInt((document.querySelector('.medium-score').innerText).replace(':', ''))
-// localStorage.eScore = 0
-
 
 function initGame() {
     clearInterval(gInterval)
@@ -476,7 +471,6 @@ function checkHighScore(lvlSize) {
     switch (lvlSize) {
         case 4:
             var lvl = 'b-score'
-            // var prevScore = parseInt(localStorage[lvl])
             break
         case 8:
             var lvl = 'm-score'
@@ -485,13 +479,8 @@ function checkHighScore(lvlSize) {
             var lvl = 'e-score'
             break
     }
-    console.log(lvl)
     var prevScore = localStorage[lvl]
-
-    // var currScore = parseInt((document.querySelector('.timer').innerText).replace(':', ''))
     var currScore = document.querySelector('.timer').innerText
-    console.log(currScore)
-    console.log(prevScore)
     if (prevScore === undefined || currScore < prevScore) {
         localStorage[lvl] = currScore
         document.querySelector(`.${lvl}`).innerText = currScore
