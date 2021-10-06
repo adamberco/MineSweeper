@@ -1,5 +1,18 @@
 'use strict'
 
+/*
+TO DO:
+
+Best Score :Keep the best score in local storage (per level) and show it on the page 10-12
+
+Manually positioned mines 12-14
+
+Undo 14 - 16
+
+7 BOOM! 16-18
+
+*/
+
 const MINE = '💣'
 const FLAG = '🚩'
 const EMPTY = ''
@@ -25,7 +38,7 @@ var gBoard
 
 var gLevel = {
     SIZE: 8,
-    MINES: 12
+    MINES: 4
 }
 
 var gFirstMove = true
@@ -42,6 +55,15 @@ var gInterval
 
 var gSafeClick = 3
 var gElSafeClick = document.querySelector('.safe-click')
+
+var elbScore = document.querySelector('.b-score')
+var elmScore = document.querySelector('.m-score')
+var eleScore = document.querySelector('.e-score')
+
+// localStorage.bScore = parseInt((document.querySelector('.beginner-score').innerText).replace(':', ''))
+// localStorage.mScore = parseInt((document.querySelector('.medium-score').innerText).replace(':', ''))
+// localStorage.eScore = 0
+
 
 function initGame() {
     clearInterval(gInterval)
@@ -66,8 +88,9 @@ function initGame() {
     gElHint3.innerText = HINT
     gElSafeClick.innerText = 'Safe Click x 3'
     gSafeClick = 3
-
-    gElTimer.innerText = `00:00`
+    elbScore.innerText = (localStorage['b-score'] === undefined) ? '00:00' : localStorage['b-score']
+    elmScore.innerText = (localStorage['m-score'] === undefined) ? '00:00' : localStorage['m-score']
+    eleScore.innerText = (localStorage['e-score'] === undefined) ? '00:00' : localStorage['e-score']
     gMinesLeft = gLevel.MINES
     gBoard = buildBoard(gLevel)
     renderBoard(gBoard, '.board-container')
@@ -213,8 +236,9 @@ function cellMarked(elCell, i, j) {
     }
 }
 
-// open all negs of 0 negs cell
+// open recursively all 0 negs ,negs cells
 function expandShown(board, elCell, i, j) {
+    var negs = []
     elCell.style.backgroundColor = "#C56824"
     var cellI = i
     var cellJ = j
@@ -224,6 +248,9 @@ function expandShown(board, elCell, i, j) {
             if (j < 0 || j >= board[i].length) continue;
             if (gBoard[i][j].isMarked || gBoard[i][j].isMine) continue
             if (i === cellI && j === cellJ) continue;
+            if (gBoard[i][j].minesAroundCount === 0 && !gBoard[i][j].isShown) {
+                negs.push({ i: i, j: j })
+            }
             var currElCell = document.querySelector(`.cell${i}-${j}`)
             if (!gBoard[i][j].isShown) gGame.shownCount++
             gBoard[i][j].isShown = true
@@ -231,9 +258,14 @@ function expandShown(board, elCell, i, j) {
             currElCell.innerText = (gBoard[i][j].minesAroundCount === 0) ? EMPTY : gBoard[i][j].minesAroundCount
         }
     }
-    // expandShown(board, elCell, cellI - 1, cellJ - 1)
+    if (!negs.length) return
+    for (var i = 0; i < negs.length; i++) {
+        var inxI = negs[i].i
+        var inxJ = negs[i].j
+        var currElCell = document.querySelector(`.cell${inxI}-${inxJ}`)
+        expandShown(gBoard, currElCell, inxI, inxJ)
+    }
 }
-
 
 function decreasedLife(elCell) {
 
@@ -297,6 +329,8 @@ function resetGame(isWon) {
                 }
             }
         }
+    } else {
+        checkHighScore(gLevel.SIZE)
     }
     gGame = {
         isOn: false,
@@ -438,3 +472,29 @@ function safeClick() {
     }
 }
 
+function checkHighScore(lvlSize) {
+    switch (lvlSize) {
+        case 4:
+            var lvl = 'b-score'
+            // var prevScore = parseInt(localStorage[lvl])
+            break
+        case 8:
+            var lvl = 'm-score'
+            break
+        case 12:
+            var lvl = 'e-score'
+            break
+    }
+    console.log(lvl)
+    var prevScore = localStorage[lvl]
+
+    // var currScore = parseInt((document.querySelector('.timer').innerText).replace(':', ''))
+    var currScore = document.querySelector('.timer').innerText
+    console.log(currScore)
+    console.log(prevScore)
+    if (prevScore === undefined || currScore < prevScore) {
+        localStorage[lvl] = currScore
+        document.querySelector(`.${lvl}`).innerText = currScore
+        gH1.innerText = 'WINNER - and a New High Score!'
+    }
+}

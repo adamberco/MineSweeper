@@ -15,17 +15,14 @@
 
 <body onload="initGame()">
     <h1>MINE SWEEPER</h1>
-    <div class="header">
+    <div class="header ">
         <table>
             <tr>
                 <td class="mines"></td>
                 <td class="smiley" onclick="initGame()" title="Click ME to restart">😊</td>
-                <td class="timer">Timer</td>
+                <td class="timer">00:00</td>
             </tr>
-        </table>
-    </div>
-    <div class="hearts">
-        <table>
+            <tr></tr>
             <tr>
                 <td class="heart1">💖</td>
                 <td class="heart2">💖</td>
@@ -33,6 +30,7 @@
             </tr>
         </table>
     </div>
+
 
     <div class="test">
         <div class="hints test">
@@ -62,12 +60,21 @@
     </div>
     <h2>How good are you?</h2>
     </div>
+
     <div class="level">
         <table>
             <tr>
                 <td onclick="changeLvl(this)">Beginner</td>
                 <td onclick="changeLvl(this)">Medium</td>
                 <td onclick="changeLvl(this)">Expert</td>
+            </tr>
+            <tr>
+                <td colspan="3">HIGH SCORE</td>
+            </tr>
+            <tr>
+                <td class="b-score"></td>
+                <td class="m-score"></td>
+                <td class="e-score"></td>
             </tr>
         </table>
     </div>
