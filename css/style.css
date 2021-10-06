@@ -52,59 +52,76 @@ h2{
 
   }
 
-    .test{
-      height: 350px;
-      position: relative;
+  .test{
+    height: 350px;
+    display: flex;
+    margin-bottom: 15px;
+    margin-top: 15px;
+  }
+
+  .hints{
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    border: 3px solid white;
+    border-radius: 15px;
+    background-color: #9a875d;
+    left: 50px;
+  }
+
+
+  .hints td{
+    
+    width: 60px;
+    height: 20px;
+    border-radius: 15px;
+    font-size: 20px;
+    cursor: pointer;
+
     }
-    .hints{
-      margin: 0;
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
-
-      display: inline-block;
-      margin: auto;
-      padding: absolute;
-      border: 3px solid white;
-      border-radius: 15px;
-      background-color: #9a875d;
-      left: 50px;
-      vertical-align: middle;
-      height: 350px;
-      width: 60px;
-
-    }
-    .hints td {
-      
-      /* width: 40px;
-      height: 20px; */
-      /* border-radius: 15px; */
-      /* font-size: 20px; */
 
 
-      }
-      .hint{
-        font-size: 30px;
-        cursor: pointer;
+    .safe-click{
+      margin-top: 20px;
+      background-color: lightseagreen;
+      color: white;
+      border-radius: 10px;
+      font-size: 15px;
+      cursor: pointer;
+        }
 
 
-      }
-      .safe-click{
-        margin-top: 20px;
-        background-color: lightseagreen;
-        color: white;
-        border: 1px solid white;
-        border-radius: 10px;
-        font-size: 15px;
-        cursor: pointer;
-
-
-
-      }
-.board-container{
-  /* display: inline-block; */
-
+.board{
+margin: 0;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+cursor: pointer;
+  /* margin-left: 30px; */
+border: 3px solid white;
+border-radius: 15px;
+background-color: #9a875d;
+color: #620f0f;
+font-weight: bold;
+width: 330px;
+height: 350px;
+  
 }
+
+
+.cell {
+width: 20px;
+height: 20px;
+text-align: center;
+font-size: 15px;
+border: 2px solid white ;
+background-color: #FFF8E5;
+cursor: pointer;
+border-radius: 7px;
+}
+
 
 .score-board{
   width: 300px;
@@ -118,33 +135,6 @@ h2{
 
   }
 
-.board{
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-    /* margin-left: 30px; */
-  border: 3px solid white;
-  border-radius: 15px;
-  background-color: #9a875d;
-  color: #620f0f;
-  font-weight: bold;
-  
-    
-  }
-  
-.cell {
-  width: 20px;
-  height: 20px;
-  text-align: center;
-  font-size: 15px;
-  border: 2px solid white ;
-  background-color: #FFF8E5;
-  cursor: pointer;
-  border-radius: 7px;
-}
 
 .level{
       margin: auto;
