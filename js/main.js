@@ -3,13 +3,13 @@
 /*
 TO DO:
 
-Best Score :Keep the best score in local storage (per level) and show it on the page 10-12
+Best Score :Keep the best score in local storage (per level) and show it on the page 10-12 DONE
 
-Manually positioned mines 12-14
+Manually positioned mines 12-14 DONE
 
 Undo 14 - 16
 
-7 BOOM! 16-18
+7 BOOM! 16-18 
 
 */
 
@@ -36,6 +36,10 @@ var gGame = {
 
 var gBoard
 
+var gPrevBoard
+
+var gHistory
+
 var gLevel = {
     SIZE: 8,
     MINES: 12
@@ -43,6 +47,8 @@ var gLevel = {
 
 var gFirstMove = true
 var gHint = false
+var gManuallyMode = false
+var gSevenBoom = false
 
 var gH1 = document.querySelector('h1')
 var gSmiley = document.querySelector('.smiley')
@@ -55,6 +61,9 @@ var gInterval
 
 var gSafeClick = 3
 var gElSafeClick = document.querySelector('.safe-click')
+
+var gManuallMineCount = gLevel.MINES
+
 
 var elbScore = document.querySelector('.b-score')
 var elmScore = document.querySelector('.m-score')
@@ -70,11 +79,11 @@ function initGame() {
         secsPassed: 0,
         minsPassed: 0
     }
-
+    gManuallMineCount = gLevel.MINES
     gGame.isOn = true
     gFirstMove = true
-    gH1.innerText = "MINE SWEEPER"
-    gSmiley.innerText = '😊'
+    gH1.innerText = (gManuallyMode) ? 'Manuall Mode!' : "MINE SWEEPER"
+    gSmiley.innerText = (gManuallyMode) ? '🧐' : '😊'
     gElHeart1.innerText = HEART
     gElHeart2.innerText = (gLevel.SIZE === 4) ? EMPTY : HEART
     gElHeart3.innerText = HEART
@@ -83,11 +92,13 @@ function initGame() {
     gElHint3.innerText = HINT
     gElSafeClick.innerText = 'Safe Click x 3'
     gSafeClick = 3
+    gElTimer.innerText = '00:00'
     elbScore.innerText = (localStorage['b-score'] === undefined) ? '00:00' : localStorage['b-score']
     elmScore.innerText = (localStorage['m-score'] === undefined) ? '00:00' : localStorage['m-score']
     eleScore.innerText = (localStorage['e-score'] === undefined) ? '00:00' : localStorage['e-score']
     gMinesLeft = gLevel.MINES
     gBoard = buildBoard(gLevel)
+    gPrevBoard = copyMat(gBoard)
     renderBoard(gBoard, '.board-container')
 }
 
@@ -105,6 +116,7 @@ function buildBoard(lvl) {
             }
         }
     }
+
     return board;
 }
 
@@ -114,10 +126,9 @@ function renderBoard(mat, selector) {
     for (var i = 0; i < mat.length; i++) {
         strHTML += '<tr>';
         for (var j = 0; j < mat[0].length; j++) {
-            // var cell = (mat[i][j].isMine) ? MINE : ''
             var cell = ''
             var className = 'cell cell' + i + '-' + j;
-            strHTML += `<td class="${className}" onmousedown="cellClicked(this, ${i}, ${j},event)">${cell}</td>`
+            strHTML += `<td class="${className}" onmousedown="cellClicked(this, ${i}, ${j},event)" oncontextmenu= "cellMarked(this, ${i},${j})")  >${cell}</td>`
         }
         strHTML += '</tr>'
     }
@@ -150,9 +161,19 @@ function setMinesNegsCount(board, i, j) {
     return count;
 }
 
-//filling the board after first click
+//  filling the board after first click or when all mines in place in manual mode
 function fillBoard(board) {
-    addRndMines(board) // adding random mines to the board
+    // adding random mines to the board if not in manuall mode
+    if (gManuallyMode === false && gSevenBoom === false) {
+        addRndMines(board)
+    }
+    else if (gManuallyMode === true) {
+        gManuallyMode = false
+        gFirstMove = false
+    } else if (gSevenBoom === true) {
+        gSevenBoom = false
+        sevenBoomMines()
+    }
 
     // adding minesAround prop to the emptey cells
     for (var i = 0; i < board.length; i++) {
@@ -167,7 +188,14 @@ function cellClicked(elCell, i, j, ev) {
 
     if (!gGame.isOn) return
 
+    gPrevBoard = copyMat(gBoard)
+
     if (ev.button === 0) {  // if Mouse Key is Left
+
+        if (gManuallyMode) {
+            placeMine(i, j)
+            return
+        }
 
         if (gHint) {  // give hint by click
             getHint(i, j)
@@ -178,10 +206,13 @@ function cellClicked(elCell, i, j, ev) {
             gFirstMove = false
             gInterval = setInterval(timer, 1000)
             gBoard[i][j].isShown = true
-            // gGame.shownCount++
             fillBoard(gBoard)
+            // gPrevBoard = copyMat(gBoard)
+
+
         } else if (gBoard[i][j].isMarked || gBoard[i][j].isShown) return
 
+        // gPrevBoard = copyMat(gBoard)
         if (!gBoard[i][j].isMine) { //  NOT MINE
             gBoard[i][j].isShown = true
             if (gBoard[i][j].minesAroundCount === 0) {
@@ -198,7 +229,7 @@ function cellClicked(elCell, i, j, ev) {
             decreasedLife(elCell)
         }
 
-    } else if (ev.button === 2) cellMarked(elCell, i, j) // if Mouse Key is Right
+    }
 
     if (checkGameOver()) resetGame(true)
 }
@@ -229,6 +260,7 @@ function cellMarked(elCell, i, j) {
 
         if (gBoard[i][j].isMine) gGame.markedCount--
     }
+    if (checkGameOver()) resetGame(true)
 }
 
 // open recursively all 0 negs ,negs cells
@@ -262,6 +294,7 @@ function expandShown(board, elCell, i, j) {
     }
 }
 
+//  decreas hearts from the header when click on a mine
 function decreasedLife(elCell) {
 
     if (gElHeart1.innerText === HEART) {
@@ -303,6 +336,7 @@ function decreasedLife(elCell) {
     }
 }
 
+// check the conditions for game over
 function checkGameOver() {
     if (gGame.shownCount === gLevel.SIZE ** 2 - gLevel.MINES && gGame.markedCount === gLevel.MINES) {
         return true
@@ -310,6 +344,7 @@ function checkGameOver() {
     else false
 }
 
+// reset the game
 function resetGame(isWon) {
     gFirstMove = true
 
@@ -339,6 +374,7 @@ function resetGame(isWon) {
     gInterval = null
 }
 
+// add random mines in the board
 function addRndMines(board) {
     var count = 0
     while (count !== gLevel.MINES) {
@@ -356,6 +392,7 @@ function addRndMines(board) {
     }
 }
 
+// timer
 function timer() {
     gGame.secsPassed++
     if (gGame.secsPassed === 59) {
@@ -365,6 +402,7 @@ function timer() {
     gElTimer.innerText = (gGame.secsPassed < 10) ? `${'0' + gGame.minsPassed}:${'0' + gGame.secsPassed} ` : `${'0' + gGame.minsPassed}:${gGame.secsPassed}`
 }
 
+// change the board in case of lvl change
 function changeLvl(elBtn) {
     switch (elBtn.innerText) {
         case 'Beginner':
@@ -383,12 +421,15 @@ function changeLvl(elBtn) {
     initGame()
 }
 
+// switch for hint mode
 function hintMode(elHint) {
     if (gFirstMove) return
     if (elHint.innerText === EMPTY) return
+
     gHint = true
 }
 
+//open a cell and his negs for few seconds
 function getHint(i, j) {
     var cellI = i
     var cellJ = j
@@ -419,11 +460,14 @@ function getHint(i, j) {
     gHint = false
 
     if (gElHint1.innerText === HINT) {
+        gElHint1.style.fontSize = '35px'
         gElHint1.innerText = EMPTY
         return
     }
 
     if (gElHint2.innerText === HINT) {
+        gElHint1.style.fontSize = '35px'
+
         gElHint2.innerText = EMPTY
         return
     }
@@ -435,6 +479,7 @@ function getHint(i, j) {
 
 }
 
+//mark an empty and safe cell to click 
 function safeClick() {
     if (gFirstMove) return
     if (gGame.shownCount === gLevel.SIZE ** 2 - gLevel.MINES) return
@@ -467,6 +512,7 @@ function safeClick() {
     }
 }
 
+// update the highscore board and the local storage
 function checkHighScore(lvlSize) {
     switch (lvlSize) {
         case 4:
@@ -486,4 +532,85 @@ function checkHighScore(lvlSize) {
         document.querySelector(`.${lvl}`).innerText = currScore
         gH1.innerText = 'WINNER - and a New High Score!'
     }
+}
+// switch for manual mode
+function manuallMode() {
+    gManuallyMode = !gManuallyMode
+    initGame()
+}
+//  place mine im manual mode
+function placeMine(i, j) {
+    if (gBoard[i][j].isMine) return
+    var currElCell = document.querySelector(`.cell${i}-${j}`)
+    gBoard[i][j].isMine = true
+    currElCell.innerText = MINE
+    gManuallMineCount--
+    gElMines.innerText = gManuallMineCount + FLAG
+
+    if (gManuallMineCount === 0) { // start the game when all mines in place
+        fillBoard(gBoard)
+        gSmiley.innerText = '😊'
+        gH1.innerText = 'START GAME!'
+        gElMines.innerText = gLevel.MINES + FLAG
+        gInterval = setInterval(timer, 1000)
+        for (var i = 0; i < gBoard.length; i++) {
+            for (var j = 0; j < gBoard.length; j++) {
+                document.querySelector(`.cell${i}-${j}`).innerText = EMPTY
+            }
+        }
+    }
+}
+
+
+function sevenBoomMood() {
+    gSevenBoom = true
+    initGame()
+}
+
+function sevenBoomMines() {
+    var count = 1
+    var minescount = 0
+    for (var i = 0; i < gBoard.length; i++) {
+        for (var j = 0; j < gBoard[0].length; j++) {
+            if (count % 7 === 0 || count % 10 === 7) {
+                gBoard[i][j].isMine = true
+                minescount++
+            }
+            count++
+        }
+    }
+    gLevel.MINES = minescount
+    gElMines.innerText = minescount + FLAG
+
+}
+
+
+function undo() {
+    if (gFirstMove) return
+    console.log('UNDO');
+    for (var i = 0; i < gPrevBoard.length; i++) {
+        for (var j = 0; j < gPrevBoard[0].length; j++) {
+            var prevCell = gPrevBoard[i][j]
+            var currCell = gBoard[i][j]
+            var elCell = document.querySelector(`.cell${i}-${j}`)
+
+            if (currCell.isMarked && !prevCell.isMarked) {
+                elCell.innerText = EMPTY
+                elCell.style.backgroundColor = 'white'
+                prevCell.isMarked = false
+                gMinesLeft++
+                gElMines.innerText = `${gMinesLeft} ${FLAG} `
+                if (currCell.isMine) gGame.markedCount--
+
+            }
+            if (currCell.isShown && !prevCell.isShown) {
+                elCell.innerText = EMPTY
+                elCell.style.backgroundColor = 'white'
+                prevCell.isShown = false
+                gGame.shownCount--
+            }
+        }
+    }
+    if (gGame.shownCount === 0) return
+    gBoard = copyMat(gPrevBoard)
 }
