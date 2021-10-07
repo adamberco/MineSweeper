@@ -19,12 +19,22 @@ const EMPTY = ''
 const HEART = '💖'
 const HINT = '💡'
 
+const soundClick = new Audio('../sounds/click.wav')
+const soundGameOver = new Audio('../sounds/game-over.wav')
+const soundMine = new Audio('../sounds/mine.wav')
+const soundFlag = new Audio('../sounds/flag.wav')
+const soundWin = new Audio('../sounds/win.wav')
+const soundStart = new Audio('../sounds/start.wav')
+
+
 var gElHeart1 = (document.querySelector('.heart1'))
 var gElHeart2 = (document.querySelector('.heart2'))
 var gElHeart3 = (document.querySelector('.heart3'))
 var gElHint1 = (document.querySelector('.hint1'))
 var gElHint2 = (document.querySelector('.hint2'))
 var gElHint3 = (document.querySelector('.hint3'))
+
+
 
 var gGame = {
     isOn: false,
@@ -70,6 +80,7 @@ var eleScore = document.querySelector('.e-score')
 
 
 function initGame() {
+    soundStart.play()
     clearInterval(gInterval)
     gInterval = null
     gGame = {
@@ -207,11 +218,10 @@ function cellClicked(elCell, i, j, ev) {
             gInterval = setInterval(timer, 1000)
             gBoard[i][j].isShown = true
             fillBoard(gBoard)
-
+            soundClick.play()
 
         } else if (gBoard[i][j].isMarked || gBoard[i][j].isShown) return
 
-        // gPrevBoard = copyMat(gBoard)
         if (!gBoard[i][j].isMine) { //  NOT MINE
             gBoard[i][j].isShown = true
             if (gBoard[i][j].minesAroundCount === 0) {
@@ -221,10 +231,12 @@ function cellClicked(elCell, i, j, ev) {
             }
             elCell.style.backgroundColor = "#C56824"
             gGame.shownCount++
+            soundClick.play();
         }
         else { //    MINE!!
             elCell.innerText = MINE
             elCell.style.backgroundColor = "#d13a3a"
+            soundMine.play()
             decreasedLife(elCell)
         }
 
@@ -241,7 +253,7 @@ function cellMarked(elCell, i, j) {
     if (!gBoard[i][j].isMarked) { // Not Marked Cell
         gBoard[i][j].isMarked = true // model
         elCell.innerText = FLAG //  DOM
-
+        soundFlag.play()
         gMinesLeft-- //update the minesleft in the header
         if (gMinesLeft < 0) gMinesLeft = 0
         gElMines.innerText = `${gMinesLeft} ${FLAG} `
@@ -304,7 +316,7 @@ function decreasedLife(elCell) {
             gH1.innerHTML = 'MINE SWEEPER'
             elCell.style.backgroundColor = 'white'
             return
-        }, 1000)
+        }, 500)
         return
     }
 
@@ -316,7 +328,7 @@ function decreasedLife(elCell) {
             gH1.innerHTML = 'MINE SWEEPER'
             elCell.style.backgroundColor = 'white'
             return
-        }, 1000)
+        }, 500)
         return
     }
 
@@ -328,7 +340,7 @@ function decreasedLife(elCell) {
             gH1.innerHTML = 'MINE SWEEPER'
             elCell.style.backgroundColor = 'white'
             return
-        }, 1000)
+        }, 500)
     }
     else {
         resetGame(false)
@@ -350,6 +362,7 @@ function resetGame(isWon) {
     gH1.innerText = (isWon) ? 'WINNER!!' : 'You Lost - Try again'
     gSmiley.innerText = (isWon) ? '😎' : '🤯'
     if (!isWon) {
+        soundGameOver.play()
         for (var i = 0; i < gBoard.length; i++) {
             for (var j = 0; j < gBoard[0].length; j++) {
                 if (gBoard[i][j].isMine) {
@@ -359,6 +372,7 @@ function resetGame(isWon) {
             }
         }
     } else {
+        soundWin.play()
         checkHighScore(gLevel.SIZE)
     }
     gGame = {
@@ -383,7 +397,7 @@ function addRndMines(board) {
     while (count !== gLevel.MINES) {
         var idxI = getRandomInt(0, gLevel.SIZE)
         var idxJ = getRandomInt(0, gLevel.SIZE)
-        countIter ++
+        countIter++
         if (board[idxI][idxJ].isMine || board[idxI][idxJ].isShown) continue
         board[idxI][idxJ] = {
             minesAroundCount: 0,
@@ -456,7 +470,8 @@ function getHint(i, j) {
                 if (gBoard[i][j].isShown) continue
                 var currElCell = document.querySelector(`.cell${i}-${j}`)
                 currElCell.style.backgroundColor = "white"
-                currElCell.innerText = EMPTY
+                currElCell.innerText = (gBoard[i][j].isMarked) ? FLAG : EMPTY
+
             }
         }
     }, 1000)
@@ -572,6 +587,7 @@ function sevenBoomMood() {
 function sevenBoomMines() {
     var count = 1
     var minescount = 0
+    gSmiley.innerText = '7️⃣'
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[0].length; j++) {
             if (count % 7 === 0 || count % 10 === 7) {

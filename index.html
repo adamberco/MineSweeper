@@ -32,40 +32,7 @@
     </div>
 
 
-    <div class="test">
-        <!-- <div class="hints">
-            <table>
-                <tr>
-                    <td class="hint hint1" onclick="hintMode(this)" title="Click for HINT">💡</td>
-                </tr>
-                <tr>
-                    <td class="hint hint2" onclick="hintMode(this)" title="Click for HINT">💡</td>
-                </tr>
-                <tr>
-                    <td class="hint hint3" onclick="hintMode(this)" title="Click for HINT">💡</td>
-                </tr>
-                <tr>
-                    <td class="hint" colspan="3" title="Click ME for 7-BOOM MODE" onclick=" sevenBoomMood()">
-                        💥
-                    </td>
-                </tr>
-                <tr>
-                    <td class="hint" colspan="3" title="Click ME for Manuall MODE" onclick=" manuallMode()">⚙️</td>
-                </tr>
-                <tr>
-                    <td class="hint" colspan="3" title="Click ME for one move Back" onclick=" undo()">↩️</td>
-                </tr>
-                <tr>
-                    <td class="space">
-                    </td>
-                </tr>
-                <tr class="safe-click-container">
-                    <td class="safe-click" colspan="3" onclick="safeClick()">Safe Click x 3</td>
-                </tr>
-
-
-            </table>
-        </div> -->
+    <div class="container">
         <div class="board-container"></div>
         <div class="hints">
             <table>
@@ -79,22 +46,19 @@
                     <td class="hint hint3" onclick="hintMode(this)" title="Click for HINT">💡</td>
                 </tr>
                 <tr>
+                    <td class="hint" colspan="3" title="Click ME for one move Back" onclick=" undo()">↩️</td>
+                </tr>
+
+                <tr class="safe-click-container">
+                    <td class="safe-click"  onclick="safeClick()">Safe Click x 3</td>
+                </tr>
+                <tr>
                     <td class="hint" colspan="3" title="Click ME for 7-BOOM MODE" onclick=" sevenBoomMood()">
                         💥
                     </td>
                 </tr>
                 <tr>
                     <td class="hint" colspan="3" title="Click ME for Manuall MODE" onclick=" manuallMode()">⚙️</td>
-                </tr>
-                <tr>
-                    <td class="hint" colspan="3" title="Click ME for one move Back" onclick=" undo()">↩️</td>
-                </tr>
-                <tr>
-                    <td class="space">
-                    </td>
-                </tr>
-                <tr class="safe-click-container">
-                    <td class="safe-click" colspan="3" onclick="safeClick()">Safe Click x 3</td>
                 </tr>
 
 
@@ -108,9 +72,9 @@
         <table>
             <tr style="font-size: 30px;">Choose Level</tr>
             <tr>
-                <td onclick="changeLvl(this)">Beginner</td>
-                <td onclick="changeLvl(this)">Medium</td>
-                <td onclick="changeLvl(this)">Expert</td>
+                <td onclick="changeLvl(this)" class="beginner">Beginner</td>
+                <td onclick="changeLvl(this)"class="medium">Medium</td>
+                <td onclick="changeLvl(this)"class="expert">Expert</td>
             </tr>
             <tr>
                 <td colspan="3" style="background-color: white ;color:black;">HIGH SCORE</td>

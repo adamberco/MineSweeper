@@ -68,14 +68,18 @@ h2 {
   /* left: 20%; */
 }
 
-.hints td {
+.hint {
   width: 60px;
   height: 20px;
   border-radius: 15px;
-  font-size: 20px;
+  font-size: 30px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
+.hint:hover {
+  transform: rotate(45deg);
+}
 .safe-click {
   margin-top: 20px;
   background-color: lightseagreen;
@@ -83,6 +87,10 @@ h2 {
   border-radius: 10px;
   font-size: 15px;
   cursor: pointer;
+}
+
+.safe-click:hover {
+  color: black;
 }
 
 .board-container {
@@ -96,8 +104,8 @@ h2 {
   background-color: #9a875d;
   color: #620f0f;
   font-weight: bold;
-  width: 300px;
-  height: 300px;
+  width: 350px;
+  height: 350px;
   margin: auto;
   transition: 0.3s;
 }
@@ -107,17 +115,18 @@ h2 {
   height: 20px;
   text-align: center;
   font-size: 15px;
-  border: 1px solid black;
-  background-color: #fff8e5;
+  border: 2px solid black;
+  background-color: white;
   cursor: pointer;
   border-radius: 7px;
   transition: 0.2s;
 }
 
 .cell:hover {
-  position: relative;
+  transform: scale(1.2);
+  /* position: relative;
   right: 2px;
-  top: 2px;
+  top: 2px; */
 }
 .score-board {
   width: 300px;
@@ -132,7 +141,7 @@ h2 {
 
 .level {
   margin: auto;
-  margin-top: 20px;
+  margin-top: 5px;
   width: 270px;
   border: 3px solid white;
   border-radius: 15px;
@@ -145,12 +154,43 @@ h2 {
   border-radius: 15px;
   font-size: 20px;
   cursor: pointer;
+  transition: 0.3s;
+}
+
+.beginner:hover {
+  color: white;
+  background-color: rgb(11, 207, 4);
+  -webkit-text-stroke: 0px black;
+  transform: scale(1.2);
+}
+
+.medium:hover {
+  color: white;
+  background-color: rgb(245, 148, 21);
+  -webkit-text-stroke: 0px black;
+  transform: scale(1.2);
+}
+
+.expert:hover {
+  color: white;
+  background-color: red;
+  -webkit-text-stroke: 0px black;
+  transform: scale(1.2);
+}
+
+.level td :hover {
+  transform: scale(1.5);
+  color: black;
 }
 
 .smiley {
   cursor: pointer;
+  transition: 0.3s;
 }
 
+.smiley:hover {
+  transform: scale(4);
+}
 footer {
   background-color: #9a875d;
   font-size: 1.5em;
