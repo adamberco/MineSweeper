@@ -64,10 +64,10 @@ var gElSafeClick = document.querySelector('.safe-click')
 
 var gManuallMineCount = gLevel.MINES
 
-
 var elbScore = document.querySelector('.b-score')
 var elmScore = document.querySelector('.m-score')
 var eleScore = document.querySelector('.e-score')
+
 
 function initGame() {
     clearInterval(gInterval)
@@ -207,7 +207,6 @@ function cellClicked(elCell, i, j, ev) {
             gInterval = setInterval(timer, 1000)
             gBoard[i][j].isShown = true
             fillBoard(gBoard)
-            // gPrevBoard = copyMat(gBoard)
 
 
         } else if (gBoard[i][j].isMarked || gBoard[i][j].isShown) return
@@ -374,13 +373,17 @@ function resetGame(isWon) {
     gInterval = null
 }
 
+var countIter = 0
+
 // add random mines in the board
 function addRndMines(board) {
+    var countIter = 0
+
     var count = 0
     while (count !== gLevel.MINES) {
         var idxI = getRandomInt(0, gLevel.SIZE)
         var idxJ = getRandomInt(0, gLevel.SIZE)
-
+        countIter ++
         if (board[idxI][idxJ].isMine || board[idxI][idxJ].isShown) continue
         board[idxI][idxJ] = {
             minesAroundCount: 0,
@@ -390,6 +393,7 @@ function addRndMines(board) {
         }
         count++
     }
+    console.log(countIter)
 }
 
 // timer
@@ -455,18 +459,16 @@ function getHint(i, j) {
                 currElCell.innerText = EMPTY
             }
         }
-    }, 2000)
+    }, 1000)
 
     gHint = false
 
     if (gElHint1.innerText === HINT) {
-        gElHint1.style.fontSize = '35px'
         gElHint1.innerText = EMPTY
         return
     }
 
     if (gElHint2.innerText === HINT) {
-        gElHint1.style.fontSize = '35px'
 
         gElHint2.innerText = EMPTY
         return
@@ -496,7 +498,7 @@ function safeClick() {
         setTimeout(function () {
             if (gBoard[idxI][idxJ].isShown) return
             safeCell.style.backgroundColor = 'white'
-        }, 2000)
+        }, 1000)
     }
     gSafeClick--
     switch (gSafeClick) {

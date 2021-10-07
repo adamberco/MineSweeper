@@ -2,6 +2,7 @@
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
+// var newMat = JSON.parse(JSON.stringify(mat))
 
 function copyMat(mat) {
     var newMat = [];
